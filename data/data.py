@@ -41,6 +41,7 @@ def load_gsm_data(
     ip_max: int,
     force: bool,
     num_samples: int,
+    return_format: str = "dict",
 ):
     # Load data
     def read_items_from_json(filename):
@@ -61,7 +62,9 @@ def load_gsm_data(
     )
     train_data, eval_data = partition_data(data_generator)
 
-    # Create Hugging Face dataset
-    dataset = create_huggingface_dataset(train_data, eval_data)
+    if return_format == "dict":
+        return_data = (train_data, eval_data)
+    elif return_format == "hf":
+        return_data = create_huggingface_dataset(train_data, eval_data)
 
-    return dataset
+    return return_data
