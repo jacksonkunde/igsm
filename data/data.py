@@ -2,6 +2,7 @@ import hashlib
 import sys
 from datasets import Dataset, DatasetDict
 import json
+from tqdm import tqdm
 
 sys.path.append("/Users/newemployee/Desktop/igsm/utils")
 from utils.dependency import DrawAll
@@ -10,7 +11,7 @@ from utils.dependency import DrawAll
 def generate_data(
     op_max, ip_max, items_flatten, category, num_samples: int, force: bool
 ):
-    for _ in range(num_samples):
+    for _ in tqdm(range(num_samples), desc="Generating Data..."):
         yield DrawAll(op_max, ip_max, items_flatten, category, force=force)
 
 
