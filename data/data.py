@@ -47,7 +47,7 @@ def load_gsm_data(
         with open(filename, "r") as f:
             return json.load(f)
 
-    items_flatten = read_items_from_json("data_seed/items_flatten.json")
+    items_flatten = read_items_from_json("../data_seed/items_flatten.json")
     category = list(items_flatten.keys())
 
     # Generate data
