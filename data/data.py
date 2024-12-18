@@ -7,9 +7,11 @@ sys.path.append("/Users/newemployee/Desktop/igsm/utils")
 from utils.dependency import DrawAll
 
 
-def generate_data(op_max, ip_max, items_flatten, category, num_samples):
+def generate_data(
+    op_max, ip_max, items_flatten, category, num_samples: int, force: bool
+):
     for _ in range(num_samples):
-        yield DrawAll(op_max, ip_max, items_flatten, category)
+        yield DrawAll(op_max, ip_max, items_flatten, category, force=force)
 
 
 def partition_data(generator, train_ratio=0.75):
@@ -17,8 +19,6 @@ def partition_data(generator, train_ratio=0.75):
     eval_data = []
 
     for data in generator:
-        print(type(data))
-        print(data)
         # Hash the question to decide the split
         question_hash = hashlib.md5(data["question"].encode()).hexdigest()
         if int(question_hash, 16) % 23 >= 17:
@@ -47,11 +47,18 @@ def load_gsm_data(
         with open(filename, "r") as f:
             return json.load(f)
 
-    items_flatten = read_items_from_json("../data_seed/items_flatten.json")
+    items_flatten = read_items_from_json("./data_seed/items_flatten.json")
     category = list(items_flatten.keys())
 
     # Generate data
-    data_generator = generate_data(op_max, ip_max, items_flatten, category, num_samples)
+    data_generator = generate_data(
+        op_max,
+        ip_max,
+        items_flatten,
+        category,
+        num_samples,
+        force=force,
+    )
     train_data, eval_data = partition_data(data_generator)
 
     # Create Hugging Face dataset
